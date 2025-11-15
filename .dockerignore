@@ -1,0 +1,44 @@
+# Maven build output
+target/
+!target/*.jar
+
+# Maven wrapper (already in image)
+.mvn/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+HELP.md
+*.md
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Log files
+*.log
+app.log
+
+# Test files
+src/test/
+
+# Maven wrapper scripts (optional - uncomment if you want to exclude)
+# mvnw
+# mvnw.cmd
+

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: student-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: studentdb
+      MYSQL_USER: student_user
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - student-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Application
+  student-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: student-api-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/studentdb
+      SPRING_DATASOURCE_USERNAME: student_user
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    networks:
+      - student-network
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+
+networks:
+  student-network:
+    driver: bridge
+
